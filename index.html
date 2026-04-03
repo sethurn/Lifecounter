@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MTG Voice Counter</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app">
+  <div class="player" id="p1">
+    <input value="Player 1" class="name">
+    <div class="life">40</div>
+    <button onclick="changeLife(0, -1)">-</button>
+    <button onclick="changeLife(0, 1)">+</button>
+  </div>
+
+  <div class="player" id="p2">
+    <input value="Player 2" class="name">
+    <div class="life">40</div>
+    <button onclick="changeLife(1, -1)">-</button>
+    <button onclick="changeLife(1, 1)">+</button>
+  </div>
+
+  <div id="voice">
+    <button id="mic">🎤 Hold</button>
+    <p id="output"></p>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
