@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MTG Companion App</title>
+<title>MTG Companion PWA</title>
 <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
 </head>
 <body>
 <div id="app">
@@ -15,8 +16,18 @@
     <button id="mic">🔮 Hold to Cast</button>
     <p id="voice-output"></p>
   </div>
-</div>
 
+  <div id="controls">
+    <button onclick="saveGame()">💾 Save</button>
+    <button onclick="loadGame()">📂 Load</button>
+    <button onclick="resetGame()">♻️ Reset</button>
+    <select id="player-count" onchange="updatePlayerCount(this.value)">
+      <option value="2">2 Players</option>
+      <option value="3">3 Players</option>
+      <option value="4" selected>4 Players</option>
+    </select>
+  </div>
+</div>
 <script src="script.js"></script>
 </body>
 </html>
