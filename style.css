@@ -1,63 +1,75 @@
+/* General */
 body {
-  margin:0;
+  margin: 0;
   font-family: 'MedievalSharp', cursive;
-  background: linear-gradient(180deg, #0b0b0b, #1c1c1c);
-  color: #fff;
+  background: linear-gradient(180deg,#0b0b0b,#1c1c1c);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  height: 80vh;
-  gap: 10px;
+/* Player area is relative so we can absolutely position */
+#player-area {
+  position: relative;
+  width: 100%;
+  height: 80%;
+}
+
+/* Player cards */
+.player-card {
+  position: absolute;
+  width: 150px;
+  height: 180px;
+  border-radius: 12px;
   padding: 10px;
-}
-
-.player.card {
-  border-radius: 15px;
-  padding: 15px;
   text-align: center;
-  background: var(--color);
-  color: #1a1a1a;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  position: relative;
+  font-weight: bold;
+  color: #1a1a1a;
+  background: linear-gradient(135deg,#fef1c7,#c7e0f2);
 }
 
-.player .name {
+.player-card input.name {
   background: transparent;
   border: none;
-  font-size: 18px;
+  font-size: 16px;
   text-align: center;
   font-weight: bold;
+  color: #1a1a1a;
 }
 
-.life {
-  font-size: 60px;
+.player-card .life {
+  font-size: 50px;
   margin: 10px 0;
-  font-weight: bold;
 }
 
-.controls button {
-  font-size: 22px;
-  margin: 5px;
-  border-radius: 8px;
+.player-card .controls button {
+  font-size: 18px;
+  margin: 2px;
+  padding: 4px 8px;
+  border-radius: 6px;
   border: none;
-  padding: 5px 12px;
   cursor: pointer;
   background: rgba(0,0,0,0.2);
 }
 
-.counters {
-  margin-top: 10px;
-  font-size: 18px;
+.player-card .counters {
+  margin-top: 5px;
+  font-size: 16px;
 }
 
-#voice {
+/* Voice panel */
+#voice-panel {
+  width: 100%;
   text-align: center;
-  margin-top: 20px;
+  padding: 10px;
+  background: rgba(0,0,0,0.3);
 }
 
 #mic {
@@ -68,4 +80,16 @@ body {
   background: linear-gradient(135deg,#f2c7c7,#c7e0f2);
   box-shadow: 0 0 15px #fff;
   cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 500px){
+  .player-card {
+    width: 120px;
+    height: 150px;
+    font-size: 14px;
+  }
+  .player-card .life {
+    font-size: 40px;
+  }
 }
