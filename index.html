@@ -3,30 +3,236 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MTG Companion App</title>
-<link rel="stylesheet" href="style.css">
-<link rel="manifest" href="manifest.json">
+<title>MTG Voice Life Counter</title>
+<style>
+body {
+  margin:0;
+  font-family: Arial, sans-serif;
+  background: #0e0e0e;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#player-area {
+  width: 100%;
+  height: 75%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.player-card {
+  width: 45%;
+  max-width: 260px;
+  margin: 10px;
+  padding: 15px;
+  background: #1a1a1a;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(0,0,0,0.6);
+}
+
+.player-card input {
+  width: 100%;
+  font-size: 18px;
+  text-align: center;
+  margin-bottom: 10px;
+  border: none;
+  background: transparent;
+  color: #fff;
+}
+
+.life {
+  font-size: 64px;
+  margin: 15px 0;
+  font-weight: bold;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-around;
+}
+
+.controls button {
+  font-size: 28px;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 6px;
+  background: #333;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.1s;
+}
+
+.controls button:active {
+  transform: scale(1.15);
+  background: #555;
+}
+
+#voice-area {
+  width: 100%;
+  text-align: center;
+  padding: 12px;
+  background: #111;
+}
+
+#mic {
+  font-size: 24px;
+  padding: 14px 24px;
+  border-radius: 50px;
+  border: none;
+  background: #444;
+  color: #fff;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#mic:active {
+  background: #666;
+}
+
+#voice-text {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #bbb;
+}
+
+#bottom-controls {
+  width: 100%;
+  text-align: center;
+  padding: 10px;
+  background: #111;
+}
+
+#bottom-controls button, #bottom-controls select {
+  font-size: 16px;
+  margin: 0 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background: #333;
+  color: #fff;
+}
+</style>
 </head>
 <body>
-<div id="app">
-  <div id="player-area"></div>
-  <div id="voice-panel">
-    <button id="mic">🎤 Hold to Cast</button>
-    <p id="voice-output"></p>
-  </div>
-  <div id="controls">
-    <button onclick="saveGame()">💾 Save</button>
-    <button onclick="loadGame()">📂 Load</button>
-    <button onclick="resetGame()">♻️ Reset</button>
-    <label>Players:
-      <select id="player-count" onchange="updatePlayerCount(this.value)">
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4" selected>4</option>
-      </select>
-    </label>
-  </div>
+
+<div id="player-area"></div>
+
+<div id="voice-area">
+  <button id="mic">🎤 Hold to Speak</button>
+  <div id="voice-text"></div>
 </div>
-<script src="script.js"></script>
+
+<div id="bottom-controls">
+  <button onclick="resetAll()">♻ Reset</button>
+  <label>
+    Players:
+    <select id="player-count" onchange="changePlayerCount(this.value)">
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4" selected>4</option>
+    </select>
+  </label>
+</div>
+
+<script>
+let players = [];
+let totalPlayers = 4;
+
+// Create players
+function createPlayers(count) {
+  const container = document.getElementById("player-area");
+  container.innerHTML = "";
+  players = [];
+
+  for (let i = 0; i < count; i++) {
+    players.push({ life: 40 });
+
+    const card = document.createElement("div");
+    card.className = "player-card";
+    card.innerHTML = `
+      <input class="name" value="Player ${i+1}">
+      <div class="life" id="life-${i}">40</div>
+      <div class="controls">
+        <button onclick="changeLife(${i}, -1)">-</button>
+        <button onclick="changeLife(${i}, 1)">+</button>
+      </div>`;
+    container.appendChild(card);
+  }
+}
+
+// Change life
+function changeLife(i, amount) {
+  players[i].life = Math.max(players[i].life + amount, 0);
+  document.getElementById(`life-${i}`).innerText = players[i].life;
+}
+
+// Reset
+function resetAll() {
+  players.forEach((p, i) => {
+    p.life = 40;
+    document.getElementById(`life-${i}`).innerText = 40;
+  });
+}
+
+// Change player count
+function changePlayerCount(val) {
+  totalPlayers = parseInt(val);
+  createPlayers(totalPlayers);
+}
+
+createPlayers(totalPlayers);
+
+// Voice setup
+const micBtn = document.getElementById("mic");
+const voiceText = document.getElementById("voice-text");
+const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const recognition = new SpeechRecognition();
+
+micBtn.onmousedown = () => recognition.start();
+micBtn.onmouseup = () => recognition.stop();
+
+recognition.onresult = (event) => {
+  const spoken = event.results[0][0].transcript.toLowerCase();
+  voiceText.innerText = `"${spoken}"`;
+  handleVoice(spoken);
+};
+
+function findPlayer(text) {
+  for (let i = 0; i < players.length; i++) {
+    const name = document.querySelectorAll(".name")[i].value.toLowerCase();
+    if (text.includes(name)) return i;
+  }
+  return null;
+}
+
+function handleVoice(text) {
+  const numMatch = text.match(/\d+/);
+  if (!numMatch) return;
+  const value = parseInt(numMatch[0]);
+  const target = findPlayer(text);
+
+  if (target === null) return;
+
+  if (text.includes("damage") || text.includes("take")) {
+    players[target].life = Math.max(players[target].life - value, 0);
+  }
+
+  if (text.includes("gain") || text.includes("life")) {
+    players[target].life += value;
+  }
+
+  document.getElementById(`life-${target}`).innerText = players[target].life;
+}
+
+</script>
+
 </body>
 </html>
