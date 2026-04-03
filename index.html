@@ -1,72 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>MTG Companion Counter</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MTG Companion App</title>
+<link href="https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 <div id="app">
-  <div class="grid">
-    <div class="player card" data-index="0" style="--color:#fef1c7;">
-      <input value="Player 1" class="name">
-      <div class="life">40</div>
-      <div class="controls">
-        <button onclick="changeLife(0,-1)">-</button>
-        <button onclick="changeLife(0,1)">+</button>
-      </div>
-      <div class="counters">
-        ☠️ <span class="poison">0</span>
-        🗡️ <span class="commander">0</span>
-      </div>
-    </div>
+  <div id="player-area"></div>
 
-    <div class="player card" data-index="1" style="--color:#c7e0f2;">
-      <input value="Player 2" class="name">
-      <div class="life">40</div>
-      <div class="controls">
-        <button onclick="changeLife(1,-1)">-</button>
-        <button onclick="changeLife(1,1)">+</button>
-      </div>
-      <div class="counters">
-        ☠️ <span class="poison">0</span>
-        🗡️ <span class="commander">0</span>
-      </div>
-    </div>
-
-    <div class="player card" data-index="2" style="--color:#d4c7f2;">
-      <input value="Player 3" class="name">
-      <div class="life">40</div>
-      <div class="controls">
-        <button onclick="changeLife(2,-1)">-</button>
-        <button onclick="changeLife(2,1)">+</button>
-      </div>
-      <div class="counters">
-        ☠️ <span class="poison">0</span>
-        🗡️ <span class="commander">0</span>
-      </div>
-    </div>
-
-    <div class="player card" data-index="3" style="--color:#f2c7c7;">
-      <input value="Player 4" class="name">
-      <div class="life">40</div>
-      <div class="controls">
-        <button onclick="changeLife(3,-1)">-</button>
-        <button onclick="changeLife(3,1)">+</button>
-      </div>
-      <div class="counters">
-        ☠️ <span class="poison">0</span>
-        🗡️ <span class="commander">0</span>
-      </div>
-    </div>
+  <div id="voice-panel">
+    <button id="mic">🔮 Hold to Cast</button>
+    <p id="voice-output"></p>
   </div>
-
-  <div id="voice">
-    <button id="mic">🔮 HOLD TO CAST</button>
-    <p id="output"></p>
-  </div>
-
 </div>
 
 <script src="script.js"></script>
